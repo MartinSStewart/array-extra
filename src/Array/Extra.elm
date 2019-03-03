@@ -1,6 +1,6 @@
 module Array.Extra exposing
     ( update, sliceFrom, sliceUntil, pop
-    , filterMap, apply, map2, map3, map4, map5, removeWhen
+    , filterMap, apply, mapToList, indexedMapToList, map2, map3, map4, map5, removeWhen
     , zip, zip3
     , resizelRepeat, resizerRepeat, resizelIndexed, resizerIndexed, splitAt, removeAt
     )
@@ -15,7 +15,7 @@ module Array.Extra exposing
 
 # Higher order helpers
 
-@docs filterMap, apply, map2, map3, map4, map5, removeWhen
+@docs filterMap, apply, mapToList, map2, map3, map4, map5, removeWhen
 
 
 # Zips
@@ -135,6 +135,27 @@ apply fs xs =
             )
         |> List.filterMap identity
         |> Array.fromList
+
+
+{-| Apply a function to the array, collecting the result in a List. 
+This is useful for building HTML out of an array:
+
+    Html.text : String -> Html msg
+    mapToList Html.text : Array String -> List (Html msg)
+
+-}
+mapToList : (a -> b) -> Array a -> List b
+mapToList f =
+    Array.foldl (f >> (::)) []
+
+
+{-| Apply a function to the array with the index as the first argument,
+collecting the results in a List. 
+-}
+indexedMapToList : (Int -> a -> b) -> Array a -> List b
+indexedMapToList f xs =
+    Array.foldl (\x (i, ys) -> (i + 1, f i x :: ys)) (0, []) xs
+        |> Tuple.second
 
 
 {-| Combine two arrays, combining them with the given function.
