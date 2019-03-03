@@ -15,7 +15,7 @@ module Array.Extra exposing
 
 # Higher order helpers
 
-@docs filterMap, apply, mapToList, map2, map3, map4, map5, removeWhen
+@docs filterMap, apply, mapToList, indexedMapToList, map2, map3, map4, map5, removeWhen
 
 
 # Zips
